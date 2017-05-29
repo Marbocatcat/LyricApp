@@ -6,7 +6,7 @@ import Search from './components/Search';
 const RouterComponent = () => {
   return (
     <Router sceneStyle={{ paddingTop: 65 }}>
-      <Scene key='search' component={Search} title='Lyric Search' />
+      <Scene key='search' component={Search} title='Lyrics' />
     </Router>
   );
 };

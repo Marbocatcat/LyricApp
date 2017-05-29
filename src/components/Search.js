@@ -1,19 +1,44 @@
-import React from 'react';
-import { Text } from 'react-native';
+import React, { Component } from 'react';
 
 import { Card, CardSection, Input, Button } from '../common';
+import { key } from '../util/Key';
 
-const Search = () => {
-  return (
-    <Card style={{ paddingTop: 20 }}>
-      <CardSection>
-        <Input placeholder='Title' label='Search' />
-      </CardSection>
-      <CardSection>
-        <Button>Search</Button>
-      </CardSection>
-    </Card>
-  );
-};
+export default class Search extends Component {
+  state = {
+    Artist: '',
+    Title: ''
+  }
 
-export default Search;
+  handleArtist = text => {
+    const Artist = text;
+    this.setState({ Artist });
+  }
+
+  handleTitle = text => {
+    const Title = text;
+    this.setState({ Title });
+  }
+
+  handleSearch = () => {
+    const entry = `https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?&callback=callback&q_track=${this.state.Title}&q_artist=${this.state.Artist}&apikey=`;
+    fetch(entry + key).then((response) => response.json())
+    .then((responseJSON) => console.log(responseJSON))
+    .catch((error) => console.log(error));
+  }
+
+  render() {
+    return (
+      <Card style={{ paddingTop: 20 }}>
+        <CardSection>
+          <Input placeholder='Artist' label='Artist' onChangeText={this.handleArtist} />
+        </CardSection>
+        <CardSection>
+          <Input placeholder='Title' label='Title' onChangeText={this.handleTitle} />
+        </CardSection>
+        <CardSection>
+          <Button onPress={this.handleSearch}>Search</Button>
+        </CardSection>
+      </Card>
+    );
+  }
+}
