@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-
+import { Actions } from 'react-native-router-flux';
 import { Card, CardSection, Input, Button } from '../common';
 import { key } from '../util/Key';
 
 export default class Search extends Component {
   state = {
     Artist: '',
-    Title: ''
+    Title: '',
   }
 
   handleArtist = text => {
@@ -22,8 +22,12 @@ export default class Search extends Component {
   handleSearch = () => {
     const entry = `https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?&callback=callback&q_track=${this.state.Title}&q_artist=${this.state.Artist}&apikey=`;
     fetch(entry + key).then((response) => response.json())
-    .then((responseJSON) => console.log(responseJSON))
-    .catch((error) => console.log(error));
+    .then((responseJSON) => {
+      const lyrics = responseJSON.message.body.lyrics.lyrics_body;
+      
+      Actions.result();
+    })
+      .catch((error) => console.log(error));
   }
 
   render() {
